@@ -110,11 +110,7 @@ class _LogginForm extends StatelessWidget {
               disabledColor: Colors.grey,
               color: Colors.deepPurple,
               elevation: 0,
-              onPressed: loginForm.isLoading
-                  ? null
-                  : () {
-                      ingresar();
-                    },
+              onPressed: loginForm.isLoading ? null : () => ingresar(),
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 80,
