@@ -21,17 +21,21 @@ class ProductCard extends StatelessWidget {
         alignment: Alignment.bottomLeft,
         children: [
           _BackgroundImage(url: product.picture),
-          _ProductDetails(),
+          _ProductDetails(
+            name: product.name,
+            id: product.id,
+          ),
           Positioned(
             top: 0,
             right: 0,
             child: _PriceTag(),
           ),
-          Positioned(
-            top: 0,
-            left: 0,
-            child: _NotAvailabel(),
-          ),
+          if (product.available == false)
+            Positioned(
+              top: 0,
+              left: 0,
+              child: _NotAvailabel(),
+            ),
         ],
       ),
     );
@@ -55,7 +59,7 @@ class _NotAvailabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 100,
-      height: 70,
+      height: 50,
       decoration: const BoxDecoration(
         color: Colors.orange,
         borderRadius: BorderRadius.only(
@@ -68,7 +72,7 @@ class _NotAvailabel extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            '[NotAvailabel]',
+            'No disponible',
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
@@ -107,6 +111,13 @@ class _PriceTag extends StatelessWidget {
 }
 
 class _ProductDetails extends StatelessWidget {
+  final String id, name;
+
+  const _ProductDetails({
+    required this.id,
+    required this.name,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -121,23 +132,23 @@ class _ProductDetails extends StatelessWidget {
         decoration: _builtBoxDecoration(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              "[NAME_PRODUCT]",
+              name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Text(
-              "[ID_PRODUCT]",
+              id,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
                 color: Colors.white,
                 fontWeight: FontWeight.w100,
@@ -159,7 +170,6 @@ class _ProductDetails extends StatelessWidget {
 }
 
 class _BackgroundImage extends StatelessWidget {
-  
   final String? url;
 
   const _BackgroundImage({super.key, this.url});
