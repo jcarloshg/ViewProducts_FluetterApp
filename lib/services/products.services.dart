@@ -23,8 +23,6 @@ class ProductstServices extends ChangeNotifier {
     final res = await http.get(url);
     final Map<String, dynamic> productsMaps = json.decode(res.body);
 
-    List<Product> productos = [];
-
     productsMaps.forEach((key, value) {
       final tempProduct = Product.fromMap(value);
       tempProduct.id = key;
