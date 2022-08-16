@@ -9,7 +9,6 @@ class ProductFormProviders extends ChangeNotifier {
   ProductFormProviders(this.product);
 
   updateAvailable(bool value) {
-    print('updateAvailable $value');
     product.available = value;
     notifyListeners();
   }

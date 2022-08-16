@@ -28,7 +28,7 @@ class ProductCard extends StatelessWidget {
           Positioned(
             top: 0,
             right: 0,
-            child: _PriceTag(),
+            child: _PriceTag(price: product.price),
           ),
           if (product.available == false)
             Positioned(
@@ -82,6 +82,10 @@ class _NotAvailabel extends StatelessWidget {
 }
 
 class _PriceTag extends StatelessWidget {
+  final double price;
+
+  const _PriceTag({required this.price});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -95,14 +99,14 @@ class _PriceTag extends StatelessWidget {
           bottomLeft: Radius.circular(15),
         ),
       ),
-      child: const FittedBox(
+      child: FittedBox(
         // scala el child para que no se deforme cuando sea mayor
         fit: BoxFit.contain,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            "\$123.99 🚀",
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            "\$$price 🚀",
+            style: const TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
       ),
