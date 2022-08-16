@@ -4,7 +4,7 @@ class ProductImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 45),
       child: Container(
         decoration: _boxDecoration(),
         width: double.infinity,

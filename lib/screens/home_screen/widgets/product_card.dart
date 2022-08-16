@@ -23,7 +23,7 @@ class ProductCard extends StatelessWidget {
           _BackgroundImage(url: product.picture),
           _ProductDetails(
             name: product.name,
-            id: product.id,
+            id: product.id ?? '[NOT_ID]',
           ),
           Positioned(
             top: 0,
@@ -172,7 +172,8 @@ class _ProductDetails extends StatelessWidget {
 class _BackgroundImage extends StatelessWidget {
   final String? url;
 
-  const _BackgroundImage({super.key, this.url});
+  const _BackgroundImage({this.url});
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -180,11 +181,13 @@ class _BackgroundImage extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: 400,
-        child: FadeInImage(
-          placeholder: const AssetImage('assets/loading.gif'),
-          image: NetworkImage(url!),
-          fit: BoxFit.cover,
-        ),
+        child: url == null || url == ''
+            ? const Image(image: AssetImage('assets/not_image.jpeg'))
+            : FadeInImage(
+                placeholder: const AssetImage('assets/loading.gif'),
+                image: NetworkImage(url!),
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }
