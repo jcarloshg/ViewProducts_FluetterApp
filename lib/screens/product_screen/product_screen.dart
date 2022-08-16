@@ -1,9 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:forms_validators/UI/inputs_decorations.dart';
+import 'package:forms_validators/providers/providers.index.dart';
+import 'package:forms_validators/services/services.index.dart';
 import 'package:forms_validators/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class ProductScreen extends StatelessWidget {
   const ProductScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final productstServices = Provider.of<ProductstServices>(context);
+
+    return ChangeNotifierProvider(
+      create: (_) => ProductFormProviders(productstServices.selectedProduct),
+      child: _ProductScreenBody(productstServices: productstServices),
+    );
+  }
+}
+
+class _ProductScreenBody extends StatelessWidget {
+  const _ProductScreenBody({
+    Key? key,
+    required this.productstServices,
+  }) : super(key: key);
+
+  final ProductstServices productstServices;
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +40,12 @@ class ProductScreen extends StatelessWidget {
         onPressed: () => {},
       ),
       body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
             Stack(
               children: [
-                ProductImage(),
+                ProductImage(url: productstServices.selectedProduct.picture),
                 Positioned(
                   top: 60,
                   left: 40,
@@ -62,6 +86,9 @@ class ProductScreen extends StatelessWidget {
 class _FormProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final productFormProviders = Provider.of<ProductFormProviders>(context);
+    final product = productFormProviders.product;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Container(
@@ -73,12 +100,28 @@ class _FormProduct extends StatelessWidget {
             children: [
               const SizedBox(height: 10),
               TextFormField(
+                initialValue: product.name,
+                onChanged: (value) => product.name = value,
+                validator: (value) {
+                  return (value == null || value == '')
+                      ? 'El nombre es obligatorio'
+                      : null;
+                },
                 decoration: InputsDecorations.authInputDecoration(
                   hintText: "nombre",
                   labelText: "Nomnbre del producto",
                 ),
               ),
               TextFormField(
+                initialValue: '${product.price}',
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                      RegExp(r'^(\d+)?\.?\d{0,2}'))
+                ],
+                onChanged: (value) {
+                  final newValue = double.tryParse(value) ?? 0.0;
+                  product.price = newValue;
+                },
                 keyboardType: TextInputType.number,
                 decoration: InputsDecorations.authInputDecoration(
                   hintText: "\$150",
@@ -89,8 +132,8 @@ class _FormProduct extends StatelessWidget {
               SwitchListTile.adaptive(
                 title: const Text('Disponible'),
                 activeColor: Colors.indigo,
-                value: true,
-                onChanged: (value) => {},
+                value: product.available,
+                onChanged: productFormProviders.updateAvailable,
               ),
             ],
           ),
