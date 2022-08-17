@@ -10,6 +10,7 @@ class ProductstServices extends ChangeNotifier {
 
   final List<Product> productos = [];
   bool isLoading = false;
+  bool isSaving = false;
 
   late Product selectedProduct;
 
@@ -35,6 +36,28 @@ class ProductstServices extends ChangeNotifier {
     notifyListeners();
 
     return productos;
+  }
+
+  Future saveOrCreateProduct(Product product) async {
+    isSaving = true;
+    notifyListeners();
+
+    if (product.id == null) {
+    } else {
+      await updateProduct(product);
+    }
+
+    isSaving = false;
+    notifyListeners();
+  }
+
+  Future<String> updateProduct(Product product) async {
+    final url = Uri.https(_baseUrl, 'products/${product.id}.json');
+    final res = await http.put(url, body: product.toJson());
+    final decodedData = res.body;
+
+    // todo update list productos
+    return product.id ?? decodedData;
   }
 
   // todo fetch productos

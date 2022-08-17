@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:forms_validators/models/models.index.dart';
 
@@ -14,6 +16,8 @@ class ProductFormProviders extends ChangeNotifier {
   }
 
   bool isValidForm() {
-    return formKey.currentState?.validate() ?? false;
+    final isValidForm = formKey.currentState?.validate() ?? false;
+    print('$isValidForm');
+    return isValidForm;
   }
 }
